@@ -5,7 +5,6 @@ Open Source Network Device Management System in Web Application
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1080" height="250" viewBox="542 121.78 1080 250" xml:space="preserve">
-<desc>Created with Fabric.js 5.2.4</desc>
 <defs>
 </defs>
 <rect x="0" y="0" width="100%" height="100%" fill="transparent"></rect>
