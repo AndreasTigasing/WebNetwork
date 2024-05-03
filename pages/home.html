@@ -1,0 +1,29 @@
+<!-- pages/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+{{ partial "head.html" . }}
+
+<body>
+
+    <!-- Navbar -->
+    <div id="navbar-placeholder"></div>
+    <script src="../assets/vendor/jquery/jquery.min.js"></script>
+    <script>
+        $(function () {
+            $("#navbar-placeholder").load("../partials/navbar.html");
+        });
+    </script>
+    <!-- End Navbar -->
+
+    <!-- Content -->
+    <div class="container mt-5">
+        <h1>Welcome to our Home Page</h1>
+        <p>This is the content of the home page.</p>
+    </div>
+    <!-- End Content -->
+
+    
+</body>
+
+</html>
