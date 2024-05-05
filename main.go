@@ -3,45 +3,77 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
+	"net/http"
 	"os"
-
-	"github.com/gofiber/fiber/v3"
 )
 
 type Config struct {
 	Title string `json:"title"`
-    Port int `json:"port"`
+	Port  int    `json:"port"`
 }
 
+var tpl *template.Template
+var config Config
+
 func main() {
-    // Open and read the GlobalConfig file
-    configFile, err := os.Open("GlobalConfig.json")
-    if err != nil {
-        fmt.Println("Error opening GlobalConfig file:", err)
-        return
+    // Load configuration from GlobalConfig.json
+	loadConfig("GlobalConfig.json")
+
+    // Parse templates
+    tpl = template.Must(template.ParseGlob("pages/*.html"))
+
+    // HTTP handlers
+    http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
+    http.HandleFunc("/", logHandler(homeHandler))
+    http.HandleFunc("/devices", logHandler(devicesHandler))
+    http.HandleFunc("/sites", logHandler(sitesHandler))
+    http.HandleFunc("/mac-lookup", logHandler(mac_lookupHandler))
+
+    // Start the server
+	addr := fmt.Sprintf(":%d", config.Port)
+	fmt.Printf("Server started at localhost%s\n", addr)
+	http.ListenAndServe(addr, nil)
+}
+
+// logHandler is a middleware function that logs the remote address and accessed URL
+func logHandler(next http.HandlerFunc) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        fmt.Printf("Remote Address: %s, Accessed URL: %s\n", r.RemoteAddr, r.URL.Path)
+        next.ServeHTTP(w, r)
     }
-    defer configFile.Close()
+}
 
-    // Decode JSON into Config struct
-    var config Config
-    decoder := json.NewDecoder(configFile)
-    err = decoder.Decode(&config)
-    if err != nil {
-        fmt.Println("Error decoding config JSON:", err)
-        return
-    }
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+    tpl.ExecuteTemplate(w, "index.html", config)
+}
 
-    // Create a new Fiber instance
-    app := fiber.New()
+func devicesHandler(w http.ResponseWriter, r *http.Request) {
+    tpl.ExecuteTemplate(w, "devices.html", config)
+}
 
-    // Serve the home page with the form
-    app.Get("/", func(c fiber.Ctx) error {
-        // Render the head partial with the title from config
-        return c.Render("./partial/head.html", fiber.Map{
-            "Title": config.Title,
-        })
-    })
+func sitesHandler(w http.ResponseWriter, r *http.Request) {
+    tpl.ExecuteTemplate(w, "sites.html", config)
+}
 
-    // Start the Fiber app using the port from the config
-    app.Listen(fmt.Sprintf(":%d", config.Port))
+func mac_lookupHandler(w http.ResponseWriter, r *http.Request) {
+    tpl.ExecuteTemplate(w, "mac-lookup.html", config)
+}
+
+
+
+func loadConfig(filename string) {
+	file, err := os.Open(filename)
+	if err != nil {
+		fmt.Println("Error opening config file:", err)
+		return
+	}
+	defer file.Close()
+
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(&config)
+	if err != nil {
+		fmt.Println("Error decoding config file:", err)
+		return
+	}
 }

@@ -1,0 +1,24 @@
+<!-- pages/navbar.html -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img src="/public/assets/images/logo.svg" alt="Logo" height="30">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link{{if eq .Page "devices"}} active{{end}}" href="/devices">Devices</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{{if eq .Page "sites"}} active{{end}}" href="/sites">Sites</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{{if eq .Page "mac-lookup"}} active{{end}}" href="/mac-lookup">MAC Lookup</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

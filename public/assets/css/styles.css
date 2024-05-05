@@ -1,0 +1,13 @@
+/* styles.css */
+
+.bg-custom-dark {
+    background-color: rgb(30, 30, 30);
+}
+
+.text-custom-light {
+    color: rgb(230, 230, 230)
+}
+
+h1 {
+    color: #c1272d
+}

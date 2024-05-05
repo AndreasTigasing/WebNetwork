@@ -1,0 +1,40 @@
+<!-- devices.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+{{template "head.html"}}
+
+<body class="bg-custom-dark text-custom-light">
+    <div>
+        {{template "navbar.html"}}
+    </div>
+    <!-- Content -->
+    <div class="container mt-4">
+        <h1>Device Search</h1>
+        <form>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputDeviceName">Device Name</label>
+                    <input type="text" class="form-control" id="inputDeviceName" placeholder="Enter Device Name">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputDeviceType">Device Type</label>
+                    <select id="inputDeviceType" class="form-control">
+                        <option selected>All</option>
+                        <option>Router</option>
+                        <option>Switch</option>
+                        <option>Access Point</option>
+                        <!-- Add more device types as needed -->
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <div class="mt-4" id="searchResult">
+            <!-- Search result will be displayed here -->
+        </div>
+    </div>
+    <!-- End Content -->
+</body>
+
+</html>
