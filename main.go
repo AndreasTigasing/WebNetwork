@@ -9,8 +9,11 @@ import (
 )
 
 type Config struct {
-	Title string `json:"title"`
-	Port  int    `json:"port"`
+	Title         string `json:"title"`
+    Port          int    `json:"port"`
+    SyslogEnabled bool   `json:"syslog_enabled"`
+    SyslogIP      string `json:"syslog_ip"`
+    SyslogPort    int    `json:"syslog_port"`
 }
 
 var tpl *template.Template
@@ -59,8 +62,6 @@ func sitesHandler(w http.ResponseWriter, r *http.Request) {
 func mac_lookupHandler(w http.ResponseWriter, r *http.Request) {
     tpl.ExecuteTemplate(w, "mac-lookup.html", config)
 }
-
-
 
 func loadConfig(filename string) {
 	file, err := os.Open(filename)

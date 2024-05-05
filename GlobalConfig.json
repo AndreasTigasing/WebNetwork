@@ -1,4 +1,7 @@
 {
     "title": "WebNetwork",
-    "port": 8080
+    "port": 8080,
+    "syslog_enabled": false,
+    "syslog_ip": "127.0.0.1",
+    "syslog_port": 514
 }
