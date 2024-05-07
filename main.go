@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"os"
 )
@@ -16,12 +17,21 @@ type Config struct {
     SyslogPort    int    `json:"syslog_port"`
 }
 
+type MacVendor struct {
+	MacPrefix   string `json:"Mac Prefix"`
+	VendorName  string `json:"Vendor Name"`
+	IsPrivate   bool   `json:"Private"`
+	BlockType   string `json:"Block Type"`
+	LastUpdated string `json:"Last Update"`
+}
+
 var tpl *template.Template
 var config Config
 
 func main() {
     // Load configuration from GlobalConfig.json
 	loadConfig("GlobalConfig.json")
+	loadMacVendors("MacVendors.json")
 
     // Parse templates
     tpl = template.Must(template.ParseGlob("pages/*.html"))
@@ -76,5 +86,18 @@ func loadConfig(filename string) {
 	if err != nil {
 		fmt.Println("Error decoding config file:", err)
 		return
+	}
+}
+
+func loadMacVendors(filename string) {
+	file, err := os.Open(filename)
+	if err != nil {
+		log.Fatalf("Error opening MacVendors.json file: %v", err)
+	}
+	defer file.Close()
+
+	var vendors []MacVendor
+	if err := json.NewDecoder(file).Decode(&vendors); err != nil {
+		log.Fatalf("Error decoding MacVendors.json: %v", err)
 	}
 }
