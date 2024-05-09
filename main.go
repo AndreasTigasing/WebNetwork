@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
 	"os"
 )
@@ -17,31 +16,23 @@ type Config struct {
     SyslogPort    int    `json:"syslog_port"`
 }
 
-type MacVendor struct {
-	MacPrefix   string `json:"Mac Prefix"`
-	VendorName  string `json:"Vendor Name"`
-	IsPrivate   bool   `json:"Private"`
-	BlockType   string `json:"Block Type"`
-	LastUpdated string `json:"Last Update"`
-}
-
 var tpl *template.Template
 var config Config
 
 func main() {
     // Load configuration from GlobalConfig.json
 	loadConfig("GlobalConfig.json")
-	loadMacVendors("MacVendors.json")
 
     // Parse templates
     tpl = template.Must(template.ParseGlob("pages/*.html"))
 
     // HTTP handlers
     http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
+	http.HandleFunc("/login", logHandler(loginHandler))
     http.HandleFunc("/", logHandler(homeHandler))
     http.HandleFunc("/devices", logHandler(devicesHandler))
     http.HandleFunc("/sites", logHandler(sitesHandler))
-    http.HandleFunc("/mac-lookup", logHandler(mac_lookupHandler))
+    http.HandleFunc("/mac-lookup", logHandler(macLookupHandler))
 
     // Start the server
 	addr := fmt.Sprintf(":%d", config.Port)
@@ -57,6 +48,10 @@ func logHandler(next http.HandlerFunc) http.HandlerFunc {
     }
 }
 
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+    tpl.ExecuteTemplate(w, "login.html", config)
+}
+
 func homeHandler(w http.ResponseWriter, r *http.Request) {
     tpl.ExecuteTemplate(w, "index.html", config)
 }
@@ -69,8 +64,8 @@ func sitesHandler(w http.ResponseWriter, r *http.Request) {
     tpl.ExecuteTemplate(w, "sites.html", config)
 }
 
-func mac_lookupHandler(w http.ResponseWriter, r *http.Request) {
-    tpl.ExecuteTemplate(w, "mac-lookup.html", config)
+func macLookupHandler(w http.ResponseWriter, r *http.Request) {
+	tpl.ExecuteTemplate(w, "mac-lookup.html", config)
 }
 
 func loadConfig(filename string) {
@@ -87,17 +82,5 @@ func loadConfig(filename string) {
 		fmt.Println("Error decoding config file:", err)
 		return
 	}
-}
-
-func loadMacVendors(filename string) {
-	file, err := os.Open(filename)
-	if err != nil {
-		log.Fatalf("Error opening MacVendors.json file: %v", err)
-	}
-	defer file.Close()
-
-	var vendors []MacVendor
-	if err := json.NewDecoder(file).Decode(&vendors); err != nil {
-		log.Fatalf("Error decoding MacVendors.json: %v", err)
-	}
+	fmt.Printf("Loaded title from config: %s\n", config.Title)
 }

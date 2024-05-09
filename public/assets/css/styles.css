@@ -4,6 +4,10 @@
     background-color: rgb(30, 30, 30);
 }
 
+.bg-custom-darker {
+    background-color: rgb(20, 20, 20);
+}
+
 .text-custom-light {
     color: rgb(230, 230, 230)
 }
@@ -11,3 +15,14 @@
 h1 {
     color: #c1272d
 }
+
+.input-group-text {
+    color: rgb(230, 230, 230);
+    background-color: rgb(30, 30, 30);
+}
+
+.form-control {
+    color: rgb(230, 230, 230);
+    background-color: rgb(30, 30, 30);
+}
+

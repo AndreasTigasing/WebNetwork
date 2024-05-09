@@ -1,28 +1,36 @@
-<!-- mac-lookup.html -->
 <!DOCTYPE html>
 <html lang="en">
 
-{{template "head.html"}}
+{{template "head.html" .}}
 
 <body class="bg-custom-dark text-custom-light">
-    <div>
-        {{template "navbar.html"}}
-    </div>
-    <!-- Content -->
-    <div class="container mt-4">
-        <h1>MAC Address Lookup</h1>
-        <form>
-            <div class="form-group">
-                <label for="macAddress">MAC Address</label>
-                <input type="text" class="form-control" id="macAddress" placeholder="Enter MAC Address" required>
+  <div>
+    {{template "navbar.html"}}
+  </div>
+  <div class="container mt-4">
+    <h1>MAC Address Lookup</h1>
+    <form method="POST">
+      <div class="form-group">
+        <label for="macAddress">MAC Address</label>
+        <input type="text" class="form-control" id="macAddress" placeholder="Enter MAC Address" required>
+        {{ if .error }}
+            <div class="alert alert-danger" role="alert">
+                {{ .error }}
             </div>
-            <button type="submit" class="btn btn-primary">Lookup</button>
-        </form>
-        <div class="mt-4" id="lookupResult">
-            <!-- Lookup result will be displayed here -->
-        </div>
+        {{ end }}
+      </div>
+      <button type="submit" class="btn btn-primary">Lookup</button>
+    </form>
+    <div class="mt-4" id="lookupResult">
+      <ul class="list-group">
+        <li class="list-group-item"><strong>MAC address:</strong> <span>{{.mac_address}}</span></li>
+        <li class="list-group-item"><strong>Known IP:</strong> <span>{{.known_ip}}</span></li>
+        <li class="list-group-item"><strong>Last Seen:</strong> <span>{{.last_seen}}</span></li>
+        <li class="list-group-item"><strong>Vendor:</strong> <span>{{.vendor}}</span></li>
+      </ul>
     </div>
-    <!-- End Content -->
+    
+  </div>
 </body>
 
 </html>
