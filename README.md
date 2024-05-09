@@ -4,7 +4,6 @@ Open Source Network Device Management System in Web Application
 
 
 ### Todo tasks
-- [ ] Fix Title
 - [ ] Integrate liteSQL
 - [ ] Create basic auth
 - [ ] Create basic admin panel
